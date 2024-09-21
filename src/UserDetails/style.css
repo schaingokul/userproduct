@@ -1,0 +1,67 @@
+.product{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+}
+
+.listproduct{
+    border: 1px solid rgb(0,0,0,0.2);
+    max-width: 270px;
+    text-align: center;
+    height: 290px;
+    padding: 20px;
+}
+
+.productuser{
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+}
+.headerup{
+    display: flex;
+    justify-content: space-between;
+}
+.headerdown{
+    display: flex;
+    gap: 20px;
+    
+}
+.productcontainer{
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); 
+    grid-template-rows: auto; 
+    gap: 10px;
+    padding: 5px 2px;
+    min-height: 90%;
+    width: 100%;
+}
+
+.pcontainer{
+    border: 5px solid rgb(0,0,0,0.5);
+    padding: 2px;
+    text-align: center;
+    border-radius: 20px;
+}
+
+.homepage{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.homecontainer{
+    border: 2px solid rgb(0,0,0,0.5);
+    border-radius: 20px;
+    width: 20%;
+    height: 280px;
+    text-align: center;
+    margin-bottom: 2px;
+}
+
+.logincontainer input {
+    border-radius: 7px;
+    background: white;
+    height: 30px;
+    width: 90%;
+    gap: 20px;
+}
