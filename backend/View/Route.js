@@ -6,7 +6,7 @@ const route = express.Router();
 
 route.post('/signup', signup);
 route.post('/login', login);
-route.get('/in/:role', protectionRoute, dashboard);
+route.get('/in', protectionRoute, dashboard);
 
 
 export default route;

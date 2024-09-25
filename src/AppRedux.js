@@ -6,7 +6,7 @@ import Cart from './components/Cart';
 import RootLayout from './components/RootLayout';
 
 
-function App() {
+function AppRedux() {
   const router = createBrowserRouter(createRoutesFromElements(
     <Route path='/' element ={<RootLayout/>}>
         <Route index element={<Dashboard />}/>
@@ -20,6 +20,6 @@ function App() {
   );
 }
 
-export default App;
+export default AppRedux;
 
 

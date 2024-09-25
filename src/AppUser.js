@@ -1,24 +1,24 @@
 import React from 'react';
 import Home from './UserDetails/Home.js';
 import Dashboard from './UserDetails/Dashboard.js';
-import NewProducts from './UserDetails/NewProducts';
+import NewProducts from './UserDetails/NewProducts.js';
 import {BrowserRouter as Router, Routes, Route} from 'react-router-dom';
 import './UserDetails/style.css';
 import ProtectedRoute from './ProtectedRoute.js';
 
 
-const Appp = () => {
+const AppUser = () => {
   return (
     <div>
       <Router>
         <Routes>
           <Route  path='/' element={<Home />}/>
-
-          <Route path='/in/:role' element={<ProtectedRoute />}>
+          
+          <Route  element={<ProtectedRoute />}>
             {/* Dashboard Route */}
-            <Route path='/in/:role' element={<Dashboard />} />
+            <Route path='/in' element={<Dashboard />} />
             {/* New Products Route */}
-            <Route path='/in/:role/add' element={<NewProducts />} />
+            <Route path='/in/add' element={<NewProducts />} />
           </Route>
 
         </Routes>
@@ -28,6 +28,6 @@ const Appp = () => {
   )
 }
 
-export default Appp;
+export default AppUser;
 
 

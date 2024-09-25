@@ -1,36 +1,40 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
 import Axios from 'axios';
 
 const UserDetails = () => {
-  const {role} = useParams();
-  const [allUser, setAllUser ] =useState([]);
+  
+  const [user, setUser ] =useState([]);
+  const token = localStorage.getItem('token');
 
-  // Handle the toggle state for a specific user
   const handleToggle = (id) => {
-    setAllUser((prevUsers) =>
+    setUser((prevUsers) =>
       prevUsers.map((user) =>
         user.id === id ? { ...user, isActive: !user.isActive } : user
       )
     );
   };
 
-  useEffect(()=>{
-    const fetchUser = async() => {
+  useEffect(() => {
+    const fetchProducts = async () => {
       try {
-        const response = await Axios.get(`http://localhost:5001/in/:${role}`);
-        setAllUser(response.data.user);
+        const response = await Axios.get('http://localhost:5001/in', {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
+        
+        setUser(response.data.user);
       } catch (error) {
-        console.log("UserDetails error: ",error.message);
+        console.error("Error fetching products:", error);
       }
-    }
-    fetchUser()
-  },[role])
+    };
+    fetchProducts();
+  }, [token]);
 
   return (
     <div className='productheader'>
       <div className='productcontainer'>
-        {allUser.map((user) => (
+        {user.map((user) => (
           <div key={user.id} className='pcontainer'>
           <h4>User Name: {user.username}</h4>
           <p>Email: {user.email}</p>

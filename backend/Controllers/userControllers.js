@@ -31,11 +31,11 @@ export const signup = async(req,res) => {
         const newUser = new User({
             username, email, password:hashPassword, role, isBoolean, date: currentDate
         });
-        const token = generateToken(newUser);
+        const token = generateToken(newUser._id);
         
         await newUser.save();
 
-        res.status(201).json({success:true, message: "User is Created", token, newUser});
+        res.status(201).json({success:true, message: "User is Created", token});
         
     } catch (error) {
         return res.status(500).json({success: false, message: "An error occurred during signup"});
@@ -45,9 +45,9 @@ export const signup = async(req,res) => {
 
 export const login = async(req,res) => {
     try {
-        const { email, password, role} = req.body;
+        const { email, password} = req.body;
 
-        if( !email || !password || !role){
+        if( !email || !password){
             return res.status(400).json({success: false, message: "All fields are required"});
         }
 
@@ -70,8 +70,8 @@ export const login = async(req,res) => {
         if(!isPasswordValid){
             return res.status(400).json({success: false, message: "Password Incorrect"});
         }
-        const token = generateToken(existingEmail);
-        res.status(201).json({success:true, message: "User is Created", token});
+        const token = generateToken(existingEmail._id);
+        res.status(202).json({success:true, message: "User is Accepted", token});
         
     } catch (error) {
         return res.status(500).json({success: false, message: "An error occurred during login"});
@@ -80,26 +80,14 @@ export const login = async(req,res) => {
 
 export const dashboard = async(req,res) => {
     try {
-        const userId = req.user.id;
-        const userRole = req.params;
-
-        const userVerify = await User.findById(userId);
-
-        if(!userVerify) {
-            return res.status(404).json({success: true, message: "User not found"})
-        }
-
-        if(userVerify && userVerify.role === userRole ){
-            if(userRole ==="admin") {
-                const product = await Product.find();
-                return res.status(200).json({success: true, message: "Admin user can View all the User & product details", user: userVerify, product});
-            }
-            if(userRole ==='user'){
-                const product = await Product.find();
-                return res.status(200).json({success: true, message: "user can View all the Product details",product });
-            }
-        }else {
-            return res.status(401).json({success: false, message: "user role not match"});
+        const {id} = req.user;
+        const allUser = await User.find();
+        const product = await Product.find();
+        const adminUser = await User.findById(id);
+        if(adminUser.role === 'admin'){
+            return res.status(202).json({sucess: true, message: "Admin can Access all user", user: allUser, role: adminUser.role ,  product});
+        }else{
+            return res.status(202).json({sucess: true, message: "User can View Products", product, role: adminUser.role});
         }
        
     } catch (error) {

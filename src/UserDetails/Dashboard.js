@@ -1,13 +1,32 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Products from './Products.js';
 import UserDetails from './UserDetails';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import Axios from 'axios';
 
 
 const Dashboard = () => {
-  const { role } = useParams();
+  const [role, setRole] = useState('');
   const navigate = useNavigate();
   const [toggle, setToggle] = useState('user');
+  const token = localStorage.getItem('token');
+  
+  useEffect(() => {
+    const fetchRole = async () => {
+      try {
+        const response = await Axios.get('http://localhost:5001/in', {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
+        setRole(response.data.role);
+      } catch (error) {
+        console.error('Error fetching role:', error);
+        setRole('');
+      }
+    };
+    fetchRole();
+  }, [token]);
 
   return (
     <div>

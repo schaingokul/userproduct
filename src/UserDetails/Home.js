@@ -24,13 +24,13 @@ const Home = () => {
   const handleLogin = async(e) => {
     e.preventDefault();
     try {
-        const { email, password, role } = form; 
-        const response = await Axios.post('http://localhost:5001/login', { email, password, role });
-        console.log(response.data);
+        const { email, password } = form; 
+        const response = await Axios.post('http://localhost:5001/login', { email, password });
+        console.log(response.data.token);
         const token = response.data.token;
         if (token) {
             localStorage.setItem('token', token);
-            navigate(`/in/:${role}`);
+            navigate(`/in`);
         } else {
             setIsError('Login failed: No token received.');
         }
@@ -50,7 +50,7 @@ const Home = () => {
       
       if(token){
         localStorage.setItem('token', token);
-        navigate(`/in/${role}`);
+        navigate(`/in`);
       }else {
         setIsError('Login failed: No token received.');
       }
@@ -77,14 +77,7 @@ const Home = () => {
           {toggle === 'login' ? 
           (<form className='login' onSubmit={handleLogin}>
                 <h4>Login</h4>
-                <div className='role'>
-                  <select name='role' value={form.role} onChange={handleChange} required>
-                          <option value="">Select Role</option>
-                          <option value="admin">Admin</option>
-                          <option value="user">User</option>
-                  </select>
-                </div>
-
+                
                 <div className='logincontainer'>
                     <input type='text' name='email' placeholder='Email' value={form.email} onChange={handleChange} required/><br/>
                     <input type='password' name='password' placeholder='Password' value={form.password} onChange={handleChange} required/><br/>

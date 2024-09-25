@@ -1,28 +1,33 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import Axios from 'axios';
 
 const Products = () => {
   const navigate = useNavigate();
-  const {role} = useParams();
+  const [role, setRole] = useState('');
   const [products, setProduct] = useState([]);
+  const token = localStorage.getItem('token');
 
-  useEffect(()=>{
-    const fetchProduct = async() => {
+  useEffect(() => {
+    const fetchProducts = async () => {
       try {
-        const response = await Axios.get(`http://localhost:5001/in/:${role}`);
+        const response = await Axios.get('http://localhost:5001/in', {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
         setProduct(response.data.product);
+        setRole(response.data.role);
       } catch (error) {
-        console.log("fetchProduct error message", error);
+        console.error("Error fetching products:", error);
       }
-    }
-    fetchProduct();
-  },[role]);
-    
+    };
+    fetchProducts();
+  }, [token]);
   return (
     <div className='productheader'>
       {role === 'admin' && (
-        <div onClick={() => navigate(`/in/${role}/add`)} style={{ cursor: 'pointer' }}>Add Product</div>
+        <div onClick={() => navigate(`/in/add`)} style={{ cursor: 'pointer' }}>Add Product</div>
       )}
       <div className='productcontainer'>
             {products.map((product) => (
@@ -31,7 +36,7 @@ const Products = () => {
                     <p>Image: {product.imageUrl}</p>
                     <p>Description: {product.description}</p>
                     <p>Price: {product.price}</p>
-                    <button onClick={ (e) => alert(`${product.title} is Deleted`)}>Delete</button>
+                    {role === 'admin' ? (<button onClick={ (e) => alert(`${product.title} is Deleted`)}>Delete</button>) : (<button onClick={ (e) => alert(`${product.title} Added to Cart`)}>Add to Card</button>) }
                 </div>
             ))}
       </div>

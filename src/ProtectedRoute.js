@@ -1,37 +1,40 @@
 import React, { useEffect, useState } from 'react';
-import { Outlet, Navigate, useParams} from 'react-router-dom';
 import Axios from 'axios';
+import { Outlet, Navigate } from 'react-router-dom';
+
 
 const ProtectedRoute = () => {
-  const [isAuthenticated, setIsAuthentication] = useState(false); 
-  const [loading, setLoading] = useState(true); 
-  const token = localStorage.getItem('token');
-  const {role} = useParams();
+  const [loading, setLoading] = useState(true);
+  const [isAuth, setAuth] = useState(false);
+  const frontToken = localStorage.getItem('token');
+
 
   useEffect(() => {
-    const protect = async () => {
+    const fetch = async () => {
       try {
-        await Axios.get(`http://localhost:5001/in/:${role}`, {
+        const response = await Axios.get("http://localhost:5001/in", {
           headers: {
-            Authorization: `Bearer ${token}`, 
-          },
+            Authorization: `Bearer ${frontToken}`
+          }
         });
 
-        setIsAuthentication(true);
+        if (response.status === 200) {
+          setAuth(true);
+        }
       } catch (error) {
-        setIsAuthentication(false); 
+        console.log(error.message);
       } finally {
-        setLoading(false); 
+        setLoading(false);
       }
     };
-    protect();
-  }, [role, token]);
+
+    fetch();
+  }, [loading]);
 
   if (loading) {
-    return <div>Loading.....</div>; 
+    return <div>Loading....</div>;
   }
-
-  return isAuthenticated ? <Outlet /> : <Navigate to="/" />; 
+  return isAuth ? <Outlet /> : <Navigate to="/" />;
 };
 
 export default ProtectedRoute;

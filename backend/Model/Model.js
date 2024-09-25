@@ -26,6 +26,7 @@ const Product = mongoose.model('Product', productSchema);
 export {Product};
 
 
+
 export const connect = async () => {
     try {
         const conn = await mongoose.connect(MONGO_URI);

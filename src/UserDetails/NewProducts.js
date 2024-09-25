@@ -33,7 +33,7 @@ const NewProducts = () => {
     e.preventDefault()
     try {
       console.log(form);
-      navigate(`/in/${role}`);
+      navigate(`/in`);
     } catch (error) {
       console.error("Error uploading file:", error);
     }
@@ -49,7 +49,7 @@ const NewProducts = () => {
             <input type='file' name='img' onChange={fileChange} />
         </div>
         <button onClick={handleUpload}>Upload</button>
-        <div onClick={()=> navigate(`/in/${role}`)} style={{ cursor: 'pointer' }} >Back</div>
+        <div onClick={()=> navigate(`/in`)} style={{ cursor: 'pointer' }} >Back</div>
     </div>
   );
 };
